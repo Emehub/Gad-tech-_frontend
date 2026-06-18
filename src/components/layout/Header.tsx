@@ -68,7 +68,7 @@ export function Header() {
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-4">
         {/* Logo */}
         <Link href="/" className="shrink-0">
-          <Image src="/Gad logo.jpeg" alt="GadTech" width={140} height={40} className="h-10 w-auto object-contain" priority />
+          <Image src="/Gad logo.jpeg" alt="GadTech" width={180} height={56} className="h-14 w-auto object-contain" priority />
         </Link>
 
         {/* Search */}

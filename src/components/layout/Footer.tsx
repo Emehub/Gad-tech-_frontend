@@ -37,8 +37,8 @@ export function Footer() {
       <div className="max-w-7xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {/* Brand */}
         <div>
-          <div className="mb-4">
-            <img src="/Gad logo.jpeg" alt="GadTech" className="h-10 w-auto object-contain brightness-0 invert" />
+          <div className="mb-4 inline-block bg-white rounded-xl px-3 py-2">
+            <img src="/Gad logo.jpeg" alt="GadTech" className="h-14 w-auto object-contain" />
           </div>
           <p className="text-sm text-gray-400 mb-4 leading-relaxed">
             Ghana's premier destination for IT products, electronics, and home appliances. Quality products at the best prices.
