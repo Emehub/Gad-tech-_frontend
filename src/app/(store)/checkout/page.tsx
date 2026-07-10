@@ -154,7 +154,7 @@ export default function CheckoutPage() {
           <div className="bg-white border border-gray-100 rounded-xl p-5 sticky top-24">
             <h2 className="font-bold text-lg text-gray-900 mb-4">Order Summary</h2>
             <div className="space-y-3 max-h-56 overflow-y-auto mb-4">
-              {cart.items.map((item) => (
+              {cart?.items.map((item) => (
                 <div key={item.id} className="flex justify-between text-sm gap-2">
                   <span className="text-gray-700 line-clamp-2 flex-1">{item.product.name} × {item.quantity}</span>
                   <span className="font-medium shrink-0">{formatPrice(Number(item.price) * item.quantity)}</span>
@@ -162,11 +162,11 @@ export default function CheckoutPage() {
               ))}
             </div>
             <div className="border-t pt-3 space-y-2 text-sm">
-              <div className="flex justify-between text-gray-600"><span>Subtotal</span><span>{formatPrice(cart.subtotal)}</span></div>
-              {cart.discount > 0 && <div className="flex justify-between text-green-600"><span>Discount</span><span>-{formatPrice(cart.discount)}</span></div>}
-              <div className="flex justify-between text-gray-600"><span>Shipping</span><span>{cart.shippingFee === 0 ? <span className="text-green-600 font-semibold">FREE</span> : formatPrice(cart.shippingFee)}</span></div>
+              <div className="flex justify-between text-gray-600"><span>Subtotal</span><span>{formatPrice(cart?.subtotal ?? 0)}</span></div>
+              {(cart?.discount ?? 0) > 0 && <div className="flex justify-between text-green-600"><span>Discount</span><span>-{formatPrice(cart?.discount ?? 0)}</span></div>}
+              <div className="flex justify-between text-gray-600"><span>Shipping</span><span>{cart?.shippingFee === 0 ? <span className="text-green-600 font-semibold">FREE</span> : formatPrice(cart?.shippingFee ?? 0)}</span></div>
               <div className="flex justify-between font-bold text-base text-gray-900 border-t pt-2">
-                <span>Total</span><span className="text-green-600 text-lg">{formatPrice(cart.total)}</span>
+                <span>Total</span><span className="text-green-600 text-lg">{formatPrice(cart?.total ?? 0)}</span>
               </div>
             </div>
             <button
