@@ -56,7 +56,7 @@ export default function CheckoutPage() {
       const order = await createOrder.mutateAsync({ addressId: selectedAddressId, paymentMethod, notes });
       orderId = order.data.id;
       if (paymentMethod === 'PAYSTACK') {
-        const payment = await initializePayment.mutateAsync(orderId);
+        const payment = await initializePayment.mutateAsync(orderId!);
         window.location.href = payment.data.authorizationUrl;
       } else {
         toast.success('Order placed successfully!');
