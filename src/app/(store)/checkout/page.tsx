@@ -23,6 +23,7 @@ export default function CheckoutPage() {
   const [paymentMethod, setPaymentMethod] = useState('PAYSTACK');
   const [notes, setNotes] = useState('');
   const [step, setStep] = useState<'address' | 'payment' | 'review'>('address');
+  const [isPlacingOrder, setIsPlacingOrder] = useState(false);
 
   const createOrder = useCreateOrder();
   const initializePayment = useInitializePayment();
@@ -38,7 +39,7 @@ export default function CheckoutPage() {
     });
   }, [isAuthenticated, router, fetchCart]);
 
-  if (!cart || cart.items.length === 0) {
+  if (!isPlacingOrder && (!cart || cart.items.length === 0)) {
     return (
       <div className="max-w-xl mx-auto px-4 py-20 text-center">
         <p className="text-gray-500 mb-4">Your cart is empty.</p>
@@ -49,21 +50,31 @@ export default function CheckoutPage() {
 
   const handlePlaceOrder = async () => {
     if (!selectedAddressId) { toast.error('Please select a delivery address'); return; }
+    setIsPlacingOrder(true);
+    let orderId: string | null = null;
     try {
       const order = await createOrder.mutateAsync({ addressId: selectedAddressId, paymentMethod, notes });
+      orderId = order.data.id;
       if (paymentMethod === 'PAYSTACK') {
-        const payment = await initializePayment.mutateAsync(order.data.id);
+        const payment = await initializePayment.mutateAsync(orderId);
         window.location.href = payment.data.authorizationUrl;
       } else {
         toast.success('Order placed successfully!');
-        router.push(`/account/orders`);
+        router.push('/account/orders');
       }
     } catch (err: any) {
-      toast.error(err?.response?.data?.message ?? 'Failed to place order');
+      const msg = err?.response?.data?.message ?? 'Something went wrong';
+      if (orderId) {
+        toast.error('Payment setup failed. Your order was saved — retry payment from your orders page.');
+        router.push('/account/orders');
+      } else {
+        toast.error(msg);
+        setIsPlacingOrder(false);
+      }
     }
   };
 
-  const isLoading = createOrder.isPending || initializePayment.isPending;
+  const isLoading = createOrder.isPending || initializePayment.isPending || isPlacingOrder;
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
