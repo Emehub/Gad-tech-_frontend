@@ -6,13 +6,23 @@ const api = axios.create({
   withCredentials: true,
 });
 
+function getOrCreateSessionId(): string {
+  let sessionId = localStorage.getItem('sessionId');
+  if (!sessionId) {
+    sessionId = `sess_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
+    localStorage.setItem('sessionId', sessionId);
+  }
+  return sessionId;
+}
+
 api.interceptors.request.use((config) => {
   const token = Cookies.get('accessToken');
   if (token) config.headers.Authorization = `Bearer ${token}`;
 
-  // Guest cart session
-  const sessionId = localStorage.getItem('sessionId');
-  if (sessionId) config.headers['X-Session-Id'] = sessionId;
+  // Always send session ID for guest cart support
+  if (typeof window !== 'undefined') {
+    config.headers['X-Session-Id'] = getOrCreateSessionId();
+  }
 
   return config;
 });
